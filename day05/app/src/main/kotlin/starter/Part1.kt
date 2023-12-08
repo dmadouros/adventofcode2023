@@ -21,32 +21,32 @@ class Function {
   }
 
   fun applyRange(ranges: List<Pair<Long, Long>>): List<Pair<Long, Long>> {
-    val alteredRanges = mutableListOf<Pair<Long, Long>>()
-    var temp = ranges.toMutableList()
+    val (alteredRanges, leftoverRanges) =
+        tuples.fold(Pair(emptyList<Pair<Long, Long>>(), ranges)) { memo, (dst, src, sz) ->
+          val srcEnd = src + sz
+          memo.second.fold(Pair(memo.first, emptyList())) { (alteredRanges, newRanges), range ->
+            val (start, end) = range
 
-    tuples.forEach { (dst, src, sz) ->
-      val srcEnd = src + sz
-      val newRanges = mutableListOf<Pair<Long, Long>>()
-      while (temp.isNotEmpty()) {
-        val (start, end) = temp.removeFirst()
+            val before = Pair(start, min(end, src))
+            val intersection = Pair(max(start, src), min(srcEnd, end))
+            val after = Pair(max(srcEnd, start), end)
+            val left = alteredRanges.toMutableList()
+            val right = newRanges.toMutableList()
 
-        val before = Pair(start, min(end, src))
-        val intersection = Pair(max(start, src), min(srcEnd, end))
-        val after = Pair(max(srcEnd, start), end)
+            if (before.second > before.first) {
+              right += listOf(before)
+            }
+            if (intersection.second > intersection.first) {
+              left += listOf(Pair(intersection.first - src + dst, intersection.second - src + dst))
+            }
+            if (after.second > after.first) {
+              right += listOf(after)
+            }
 
-        if (before.second > before.first) {
-          newRanges.add(before)
+            Pair(left, right)
+          }
         }
-        if (intersection.second > intersection.first) {
-          alteredRanges.add(Pair(intersection.first - src + dst, intersection.second - src + dst))
-        }
-        if (after.second > after.first) {
-          newRanges.add(after)
-        }
-      }
-      temp = newRanges
-    }
-    return alteredRanges + temp
+    return alteredRanges + leftoverRanges
   }
 }
 
