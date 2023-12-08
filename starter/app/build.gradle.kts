@@ -8,6 +8,7 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     alias(libs.plugins.jvm)
+    id("com.ncorti.ktfmt.gradle") version "0.15.1"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application

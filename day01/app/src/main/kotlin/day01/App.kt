@@ -4,79 +4,82 @@
 package day01
 
 class Part1 {
-    fun exec() {
-        val result =
-            this::class.java.getResourceAsStream("/input.txt")
-                .bufferedReader()
-                .readLines()
-                .map { line ->
-                    line.fold("") { memo, ch ->
-                        if (ch.isDigit()) {
-                            memo + ch
-                        } else {
-                            memo
-                        }
-                    }
+  fun exec() {
+    val result =
+        this::class
+            .java
+            .getResourceAsStream("/input.txt")
+            .bufferedReader()
+            .readLines()
+            .map { line ->
+              line.fold("") { memo, ch ->
+                if (ch.isDigit()) {
+                  memo + ch
+                } else {
+                  memo
                 }
-                .map { "" + it.first() + it.last() }
-                .map { it.toInt() }
-                .sum()
-        println(result)
-    }
+              }
+            }
+            .map { "" + it.first() + it.last() }
+            .map { it.toInt() }
+            .sum()
+    println(result)
+  }
 }
 
 class Part2 {
-    private val numbers = mapOf(
-        "one" to "1",
-        "two" to "2",
-        "three" to "3",
-        "four" to "4",
-        "five" to "5",
-        "six" to "6",
-        "seven" to "7",
-        "eight" to "8",
-        "nine" to "9",
-        "1" to "1",
-        "2" to "2",
-        "3" to "3",
-        "4" to "4",
-        "5" to "5",
-        "6" to "6",
-        "7" to "7",
-        "8" to "8",
-        "9" to "9",
-    )
+  private val numbers =
+      mapOf(
+          "one" to "1",
+          "two" to "2",
+          "three" to "3",
+          "four" to "4",
+          "five" to "5",
+          "six" to "6",
+          "seven" to "7",
+          "eight" to "8",
+          "nine" to "9",
+          "1" to "1",
+          "2" to "2",
+          "3" to "3",
+          "4" to "4",
+          "5" to "5",
+          "6" to "6",
+          "7" to "7",
+          "8" to "8",
+          "9" to "9",
+      )
 
-    fun exec() {
-        val result =
-            this::class.java.getResourceAsStream("/input.txt")
-                .bufferedReader()
-                .readLines()
-                .map { line ->
-                    numbers.entries
-                        .fold(emptyList<Triple<String, String, Int>>()) { memo, (word, digit) ->
-                            var words = emptyList<Triple<String, String, Int>>()
-                            var index = line.indexOf(word)
-                            while (index != -1) {
-                                words += Triple(word, digit, index)
-                                index = line.indexOf(word, index + 1)
-                            }
+  fun exec() {
+    val result =
+        this::class
+            .java
+            .getResourceAsStream("/input.txt")
+            .bufferedReader()
+            .readLines()
+            .map { line ->
+              numbers.entries
+                  .fold(emptyList<Triple<String, String, Int>>()) { memo, (word, digit) ->
+                    var words = emptyList<Triple<String, String, Int>>()
+                    var index = line.indexOf(word)
+                    while (index != -1) {
+                      words += Triple(word, digit, index)
+                      index = line.indexOf(word, index + 1)
+                    }
 
-                            memo + words
-                        }
-                        .let { words ->
-                            words
-                                .sortedBy { (_, _, index) -> index }
-                                .map { (_, digit, _) -> digit }
-                        }
-                }
-                .map { "" + it.first() + it.last() }
-                .map { it.toInt() }
-                .sum()
-        println(result)
-    }
+                    memo + words
+                  }
+                  .let { words ->
+                    words.sortedBy { (_, _, index) -> index }.map { (_, digit, _) -> digit }
+                  }
+            }
+            .map { "" + it.first() + it.last() }
+            .map { it.toInt() }
+            .sum()
+    println(result)
+  }
 }
 
 fun main() {
-    Part2().exec()
+  Part2().exec()
 }
