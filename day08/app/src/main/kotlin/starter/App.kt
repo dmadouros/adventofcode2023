@@ -71,7 +71,7 @@ class App {
           visited.count().toLong()
           visited
         }
-    
+
     val counts = journeys.map { (it.count() - 1).toLong() }
     val n1 = counts[0]
     val result = counts.drop(1).fold(n1) { memo, count -> lcm(memo, count) }
